@@ -3,6 +3,7 @@
 
 use std::time::{Duration, Instant};
 
+use raw_window_handle::{HasRawDisplayHandle as _, HasRawWindowHandle as _};
 use winit::event_loop::{
     ControlFlow, EventLoop, EventLoopBuilder, EventLoopProxy, EventLoopWindowTarget,
 };
@@ -311,7 +312,6 @@ mod glow_integration {
         prelude::{GlDisplay, NotCurrentGlContextSurfaceAccessor, PossiblyCurrentGlContext},
         surface::GlSurface,
     };
-    use raw_window_handle::HasRawWindowHandle;
 
     use super::*;
 
@@ -717,6 +717,8 @@ mod glow_integration {
                 gl: Some(gl.clone()),
                 #[cfg(feature = "wgpu")]
                 wgpu_render_state: None,
+                raw_display_handle: gl_window.window().raw_display_handle(),
+                raw_window_handle: gl_window.window().raw_window_handle(),
             });
 
             if app.warm_up_enabled() {
@@ -1157,6 +1159,8 @@ mod wgpu_integration {
                 #[cfg(feature = "glow")]
                 gl: None,
                 wgpu_render_state,
+                raw_display_handle: window.raw_display_handle(),
+                raw_window_handle: window.raw_window_handle(),
             });
 
             if app.warm_up_enabled() {

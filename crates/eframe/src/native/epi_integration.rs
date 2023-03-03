@@ -3,6 +3,8 @@ use winit::event_loop::EventLoopWindowTarget;
 #[cfg(target_os = "macos")]
 use winit::platform::macos::WindowBuilderExtMacOS as _;
 
+use raw_window_handle::{HasRawDisplayHandle as _, HasRawWindowHandle as _};
+
 #[cfg(feature = "accesskit")]
 use egui::accesskit;
 use egui::NumExt as _;
@@ -349,6 +351,8 @@ impl EpiIntegration {
             gl,
             #[cfg(feature = "wgpu")]
             wgpu_render_state,
+            raw_display_handle: window.raw_display_handle(),
+            raw_window_handle: window.raw_window_handle(),
         };
 
         let mut egui_winit = egui_winit::State::new(event_loop);
